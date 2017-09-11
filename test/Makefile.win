@@ -4,8 +4,8 @@
 CPP      = g++.exe -D__DEBUG__
 CC       = gcc.exe -D__DEBUG__
 WINDRES  = windres.exe
-OBJ      = build/main.o build/UnitTest.o build/FooTest.o build/BadmintonContainer.o build/BadmintonField.o build/BadmintonRun.o build/ConfigBadminton.o build/ConfigTool.o build/record.o build/TestConfigBadminton.o build/TestRecord.o build/TestBadmintonField.o build/TestBadmintonContainer.o
-LINKOBJ  = build/main.o build/UnitTest.o build/FooTest.o build/BadmintonContainer.o build/BadmintonField.o build/BadmintonRun.o build/ConfigBadminton.o build/ConfigTool.o build/record.o build/TestConfigBadminton.o build/TestRecord.o build/TestBadmintonField.o build/TestBadmintonContainer.o
+OBJ      = build/main.o build/UnitTest.o build/BadmintonContainer.o build/BadmintonField.o build/BadmintonRun.o build/ConfigBadminton.o build/ConfigTool.o build/record.o build/TestConfigBadminton.o build/TestRecord.o build/TestBadmintonField.o build/TestBadmintonContainer.o
+LINKOBJ  = build/main.o build/UnitTest.o build/BadmintonContainer.o build/BadmintonField.o build/BadmintonRun.o build/ConfigBadminton.o build/ConfigTool.o build/record.o build/TestConfigBadminton.o build/TestRecord.o build/TestBadmintonField.o build/TestBadmintonContainer.o
 LIBS     = -L"d:/Program Files (x86)/Dev-Cpp/MinGW64/lib32" -L"d:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib32" -static-libgcc -m32 -g3
 INCS     = -I"d:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"d:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"d:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"C:/Users/shuang/Desktop/GoodLuck/Coder/Cplus/Thoughtworks/badmintonManager/include" -I"C:/Users/shuang/Desktop/GoodLuck/Coder/Cplus/Thoughtworks/badmintonManager/src"
 CXXINCS  = -I"d:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"d:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"d:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"d:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++" -I"C:/Users/shuang/Desktop/GoodLuck/Coder/Cplus/Thoughtworks/badmintonManager/include" -I"C:/Users/shuang/Desktop/GoodLuck/Coder/Cplus/Thoughtworks/badmintonManager/include" -I"C:/Users/shuang/Desktop/GoodLuck/Coder/Cplus/Thoughtworks/badmintonManager/src"
@@ -29,9 +29,6 @@ build/main.o: main.cpp
 
 build/UnitTest.o: UnitTest.cpp
 	$(CPP) -c UnitTest.cpp -o build/UnitTest.o $(CXXFLAGS)
-
-build/FooTest.o: FooTest.cpp
-	$(CPP) -c FooTest.cpp -o build/FooTest.o $(CXXFLAGS)
 
 build/BadmintonContainer.o: ../src/BadmintonContainer.cpp
 	$(CPP) -c ../src/BadmintonContainer.cpp -o build/BadmintonContainer.o $(CXXFLAGS)

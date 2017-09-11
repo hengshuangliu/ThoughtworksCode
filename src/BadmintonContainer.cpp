@@ -51,10 +51,12 @@ bool BadmintonContainer::printTotalFee(std::ostream& outStream) {
 	outStream << "收入汇总" << std::endl;
 	outStream << "---" << std::endl; 
 	double sum = 0;
-	for(std::vector<BadmintonField>::iterator it=badmintons.begin(); it != badmintons.end(); ++it){
+	std::vector<BadmintonField>::iterator it;
+	for(it=badmintons.begin(); it != badmintons.end()-1; ++it){
 		sum += it->printRecords(outStream);
 		outStream << std::endl;
 	}
+	sum += it->printRecords(outStream);
 	outStream << "---" << std::endl;
 	outStream << "总计：" << sum << "元" << std::endl;
 	return true;

@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <ostream>
+#include <algorithm>
 
 BadmintonField::BadmintonField() {
 	std::vector<int> tmp(24, -1);
@@ -51,6 +52,10 @@ bool BadmintonField::takeOrder(std::string user, int y, int m, int d, int s, int
 		std::cout << "Error: the booking conflicts with existing bookings!"  << std::endl;
 		return false;
 	} else {
+		if(weekendFee[s] == -1 || weekendFee[e-1] == -1) {
+			std::cout << "Error: the booking is invalid!" << std::endl;
+			return false;
+		}
 		orderRecords.push_back(OrderRecord(user, y, m, d, s, e, orderFee(y, m, d, s, e) ) );
 		std::cout << "Success: the booking is accepted!" << std::endl;
 		return true;
@@ -60,27 +65,25 @@ bool BadmintonField::takeOrder(std::string user, int y, int m, int d, int s, int
 
 bool BadmintonField::cancel(std::string user, int y, int m, int d, int s, int e) {
 	std::vector<OrderRecord>::iterator it = findOrderRecord(y, m, d, s, e);
-	if( it == orderRecords.end() ){
+	if( it == orderRecords.end() ) {
 		std::cout << "Error: the booking being cancelled does not exist!" << std::endl;
 		return false;
 	}
-	
+
 	int s_tmp=0, e_tmp=0;
 	it->getTimes(s_tmp, e_tmp);
-	if( user == it->getUserID() && s_tmp == s && e_tmp == e){
+	if( user == it->getUserID() && s_tmp == s && e_tmp == e) {
 		orderRecords.erase(it);
-		
+
 		std::vector<record>::iterator it_record = findRecord(y, m, d, s, e);
-		if( it_record != records.end() ){
+		if( it_record != records.end() ) {
 			it_record ->setCharge( it_record ->getCharge() +  cancelFee(y, m, d, s, e));
-		}
-		else{
+		} else {
 			records.push_back(record(y, m, d, s, e, cancelFee(y, m, d, s, e) ) );
 		}
 		std::cout << "Success: the booking is accepted!" << std::endl;
 		return true;
-	}
-	else{
+	} else {
 		std::cout << "Error: the booking being cancelled does not exist!" << std::endl;
 		return false;
 	}
@@ -89,7 +92,7 @@ bool BadmintonField::cancel(std::string user, int y, int m, int d, int s, int e)
 
 double BadmintonField::getCancelFee() {
 	double sum = 0;
-	for(std::vector<record>::iterator it=records.begin(); it!=records.end(); ++it){
+	for(std::vector<record>::iterator it=records.begin(); it!=records.end(); ++it) {
 		sum += it->getCharge();
 	}
 	return sum;
@@ -98,44 +101,93 @@ double BadmintonField::getCancelFee() {
 
 double BadmintonField::getOrderFee() {
 	double sum = 0;
-	for(std::vector<OrderRecord>::iterator it=orderRecords.begin(); it!=orderRecords.end(); ++it){
+	for(std::vector<OrderRecord>::iterator it=orderRecords.begin(); it!=orderRecords.end(); ++it) {
 		sum += it->getCharge();
 	}
 	return sum;
 }
 
 
-char BadmintonField::getFieldNum(){
+char BadmintonField::getFieldNum() {
 	return fieldNum;
 }
 
 
-double BadmintonField::printRecords(std::ostream& oser){
+double BadmintonField::printRecords(std::ostream& oser) {
 	oser << "场地:" << fieldNum << std::endl;
-	int y, m, d;
-	int time_s, time_e;
-	double charge;
 	double sum = 0;
-	for(std::vector<record>::iterator it=records.begin(); it!=records.end(); ++it){
-		it->getDate(y, m, d);
-		it->getTimes(time_s, time_e);
-		charge = it->getCharge();
-		sum += charge;
-		oser << y << "-" << m << "-" << d << " " << time_s << ":00~" << time_e << ":00" << " 违约金 " << charge << std::endl; 
+	// sorting for print information.
+	std::sort(records.begin(), records.end());
+	std::sort(orderRecords.begin(), orderRecords.end());
+
+	std::vector<record>::iterator it=records.begin();
+	std::vector<OrderRecord>::iterator it_order=orderRecords.begin();
+	while(it!=records.end() || it_order!=orderRecords.end()) {
+		if(it == records.end() ) {
+			printOrderRecord(oser, sum, it_order);
+			++it_order;
+		} else if(it_order == orderRecords.end()) {
+			printRecord(oser, sum, it);
+			++it;
+		} else {
+			if( (*it)<(*it_order) ) {
+				printRecord(oser, sum, it);
+				++it;
+			} else {
+				printOrderRecord(oser, sum, it_order);
+				++it_order;
+			}
+		}
 	}
-	
-	for(std::vector<OrderRecord>::iterator it=orderRecords.begin(); it!=orderRecords.end(); ++it){
-		it->getDate(y, m, d);
-		it->getTimes(time_s, time_e);
-		charge = it->getCharge();
-		sum += charge;
-		oser << y << "-" << m << "-" << d << " " << time_s << ":00~" << time_e << ":00" << " " << charge << std::endl; 
-	}
-	oser << "小计：" <<  sum << std::endl;
+	oser << "小计：" <<  sum << "元" <<std::endl;
 	return sum;
 }
 
 
+void BadmintonField::printRecord(std::ostream& oser, double& sum, std::vector<record>::iterator& it) {
+	if(it!=records.end()) {
+		int y=0, m=0, d=0;
+		int time_s=0, time_e=0;
+		it->getDate(y, m, d);
+		it->getTimes(time_s, time_e);
+		double charge = it->getCharge();
+		sum += charge;
+		if(m<10) {
+			oser << y << "-0" << m;
+		} else {
+			oser << y << "-" << m;
+		}
+		if(d<10) {
+			oser << "-0";
+		} else {
+			oser << "-";
+		}
+		oser<< d << " " << time_s << ":00~" << time_e << ":00" << " 违约金 " << charge << "元" << std::endl;
+	}
+}
+
+
+void BadmintonField::printOrderRecord(std::ostream& oser, double& sum, std::vector<OrderRecord>::iterator& it_order) {
+	if(it_order!=orderRecords.end() ) {
+		int y=0, m=0, d=0;
+		int time_s=0, time_e=0;
+		it_order->getDate(y, m, d);
+		it_order->getTimes(time_s, time_e);
+		double charge = it_order->getCharge();
+		sum += charge;
+		if(m<10) {
+			oser << y << "-0" << m;
+		} else {
+			oser << y << "-" << m;
+		}
+		if(d<10) {
+			oser << "-0";
+		} else {
+			oser << "-";
+		}
+		oser << d << " " << time_s << ":00~" << time_e << ":00" << " " << charge << "元" << std::endl;
+	}
+}
 
 
 double BadmintonField::orderFee(int y, int m, int d, int s, int e) {
@@ -174,7 +226,7 @@ double BadmintonField::cancelFee(int y, int m, int d, int s, int e) {
 		for( int i=s; i<e; ++i) {
 			sum += workdayFee[i];
 		}
-		sum = weekCancel * sum;
+		sum = workCancel * sum;
 	}
 	return sum;
 }

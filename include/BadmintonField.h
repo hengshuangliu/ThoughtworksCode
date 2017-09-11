@@ -23,6 +23,9 @@ class BadmintonField
 		double cancelFee(int y, int m, int d, int s, int e); // calculate cancelFee;
 		std::vector<OrderRecord>::iterator findOrderRecord(int y, int m, int d, int s, int e);
 		std::vector<record>::iterator findRecord(int y, int m, int d, int s, int e);
+		// print single element in the records vector.
+		void printRecord(std::ostream& oser, double& sum, std::vector<record>::iterator& it);
+		void printOrderRecord(std::ostream& oser, double& sum, std::vector<OrderRecord>::iterator& it_order);
 		
 	protected:
 		char fieldNum;

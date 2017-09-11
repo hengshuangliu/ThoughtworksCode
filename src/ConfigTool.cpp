@@ -143,7 +143,7 @@ bool ConfigTool::runConfig() {
 			}
 		}
 	}
-	std::cout << "Done\n";
+//	std::cout << "Done\n";
 	fin.close();
 	return true;
 }
