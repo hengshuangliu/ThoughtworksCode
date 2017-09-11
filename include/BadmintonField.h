@@ -31,9 +31,9 @@ class BadmintonField
 		void printOrderRecord(std::ostream& oser, double& sum, std::vector<OrderRecord>::iterator& it_order);
 		
 	protected:
-		char fieldNum;
-		std::vector<int> weekendFee;
-		std::vector<int> workdayFee;
+		char fieldNum;  // this char represents the number of the field.
+		std::vector<int> weekendFee;  // vector for charge standard on the weekend.
+		std::vector<int> workdayFee;  // vector for charge standard in the workday.
 		double workCancel;
 		double weekCancel;
 		std::vector<OrderRecord> orderRecords;  // This vector for Ordering records.
