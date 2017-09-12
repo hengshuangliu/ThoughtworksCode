@@ -58,13 +58,19 @@ This main program is designed to accept lines of commands and output the total i
 
 **Test case 1**
 Command intput
+
 ![Alt text](./pic/testcase1.png)
+
 Output txt file
+
 ![Alt text](./pic/testcase1_output.png)
 
 
 **Test case 2**
 Command intput
+
 ![Alt text](./pic/case2.png)
+
 Output txt file
+
 ![Alt text](./pic/case2_output.png)
