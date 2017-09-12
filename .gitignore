@@ -1,3 +1,5 @@
 /build/
 /test/build/
 *.layout
+*.exe
+*.pdf
